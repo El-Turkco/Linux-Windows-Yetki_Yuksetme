@@ -1,0 +1,50 @@
+
+*Bilgi Toplama**
+
+(+)Bilgi toplarken işe yaracak araçlar
+    Accesschk
+    Icacls
+    Process Exlorer
+    Windows Privesc Check
+    Power Up 
+    Gibi araçlara bakabiliriz
+
+
+(+)Faydalı notlar
+    whoami /priv
+    whoami /groups
+    net user
+    net user username    
+    netstat -ano
+
+(+)Herhangi bir server dan shell olarak erişim sağlandığında bilgi toplamak için yapılması gerekenler.
+
+    İşletim sistemi ismini ve version öğrenme için:
+    systeminfo 
+    
+    Version bilgilerine göre o versiondaki açıklaları exploit etmeye çalışabiliriz.
+
+(+)Password dosyalarına veya password geçen metinlere bakmak için:
+    findstr /si password *.txt
+
+
+(+)Hazır araçlar kullanarak işletim sistemindeki version açıklarını daha kolay bir şekilde bulabiliriz.
+    Bunlara örnek: Exploit Suggester,Winpeas
+
+
+(+)Bu servisin konfigürasyon değişiklik haklarını görmek için ise aşağıdaki komutu kullanmak gerekir:
+
+    C:\> sc sdshow serviceadi
+    Ancak bu şekilde servisleri tek tek incelemek ve her bir servis için de anlaşılması zor erişim haklarını
+    incelemek pek pratik değildir. Bunun için sysinternals grubu tarafından geliştirilmiş olan “accesschk”
+    aracının kullanılması en makul yöntemdir. Bu aracı hedef bilgisayara yükledikten sonra aşağıdaki
+    komutları çalıştırarak sıradan kullanıcıların servisler üzerindeki hakları sorgulanabilir:
+    accesschk.exe -uwcqv "Authenticated Users" * /accepteula
+    accesschk.exe -uwcqv "Users" * /accepteula
+    accesschk.exe -uwcqv "Everyone" * /accepteula
+
+
+(+)Windows enumratıon script'leri ile çalışabiliriz 
+    Sisteme eriştiğimiz kullanıcıların yetkileri script’lerdeki tüm komutları çalıştırmaya yetmeyebilir. Bu
+    durumlarda oluşturulacak hata mesajlarının çıktılarımızı kirletmemesi için “standard error redirection”
+    yönetmini kullanıyoruz (2> nul). Bu yöntem sayesinde hata mesajları “standard output”a yazılmıyor.
